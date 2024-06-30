@@ -1,6 +1,17 @@
 // Firebase configuration
+var apiKeyVar = null;
+
+fetch('https://backendtest-zneg.onrender.com/api/secret').then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => apiKeyVar=data.apiKey)
+  .catch(error => console.error('Error:', error));
+
 const firebaseConfig = {
-    apiKey: "AIzaSyCeejjsmS6d9zoB4Rw6DrzHrnbVrDZwLfs",
+    apiKey: apiKeyVar,
     authDomain: "tictactoemax-f32bd.firebaseapp.com",
     databaseURL: "https://tictactoemax-f32bd-default-rtdb.asia-southeast1.firebasedatabase.app",
     projectId: "tictactoemax-f32bd",
@@ -25,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('createGameBtn').addEventListener('click', createNewGame);
     document.getElementById('joinGameBtn').addEventListener('click', joinExistingGame);
     document.getElementById('copyGameIDBtn').addEventListener('click', copyGameID);
+    
 });
 
 function createNewGame() {
@@ -40,6 +52,7 @@ function createNewGame() {
             O: false
         }
     };
+    localStorage.setItem('localPlayer', "X");
     database.ref('games/' + gameId).set(gameData);
     switchToGameScreen();
 }
@@ -56,6 +69,7 @@ function joinExistingGame() {
                 } else {
                     player = 'O';
                     database.ref('games/' + gameId + '/players').update({ O: true });
+                    localStorage.setItem('localPlayer', "O");
                     switchToGameScreen();
                 }
             } else {
@@ -69,6 +83,7 @@ function switchToGameScreen() {
     document.getElementById('homeScreen').style.display = 'none';
     document.getElementById('gameScreen').style.display = 'block';
     document.getElementById('gameIDLabel').textContent = 'Game ID: ' + gameId;
+    document.getElementById('playerDisplay').textContent = `You are : ${localStorage.getItem('localPlayer')}`;
     initializeGame();
 }
 
@@ -92,7 +107,7 @@ function handleCellClick(event) {
     const cellId = event.target.id.split('-');
     const bigCellIndex = parseInt(cellId[0].replace('cell', ''), 10);
     const smallCellIndex = parseInt(cellId[1], 10);
-
+    document.getElementById(event.target.id).classList.remove('highlight');
     if (gameState[bigCellIndex][smallCellIndex] !== '' || currentPlayer !== player) {
         return;
     }
@@ -106,7 +121,6 @@ function handleCellClick(event) {
         bigBoardState[bigCellIndex] = player;
         for(cello in gameState[bigCellIndex]){
             gameState[bigCellIndex][cello] = player;
-            event.target.classList.remove('highlight');
         }
     } else if (gameState[bigCellIndex].every(cell => cell !== '')) {
         bigBoardState[bigCellIndex] = 'D'; // Draw
