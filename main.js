@@ -104,10 +104,11 @@ function initializeGame() {
 }
 
 function handleCellClick(event) {
+    const cellItself = document.getElementById(event.target.id);
     const cellId = event.target.id.split('-');
     const bigCellIndex = parseInt(cellId[0].replace('cell', ''), 10);
     const smallCellIndex = parseInt(cellId[1], 10);
-    document.getElementById(event.target.id).classList.remove('highlight');
+    //document.getElementById(event.target.id).classList.remove('highlight');
     if (gameState[bigCellIndex][smallCellIndex] !== '' || currentPlayer !== player) {
         return;
     }
@@ -117,10 +118,13 @@ function handleCellClick(event) {
     }
 
     gameState[bigCellIndex][smallCellIndex] = player;
+    //cellItself.style.color = player === 'X' ? 'blue' : 'red';
+    cellItself.classList.remove('highlight');
     if (checkWin(gameState[bigCellIndex])) {
         bigBoardState[bigCellIndex] = player;
         for(cello in gameState[bigCellIndex]){
             gameState[bigCellIndex][cello] = player;
+            //document.getElementById(`cell${bigCellIndex}-${cello}`).style.color = player === 'X' ? 'blue' : 'red';            
         }
     } else if (gameState[bigCellIndex].every(cell => cell !== '')) {
         bigBoardState[bigCellIndex] = 'D'; // Draw
@@ -154,6 +158,12 @@ function updateBoard() {
             } 
             else {
                 cellElement.classList.remove('highlight');
+                
+                if (cellElement.textContent === 'X') {
+                    cellElement.style.color = 'blue';
+                } else if (cellElement.textContent === 'O') {
+                    cellElement.style.color = 'red';
+                }
             }
         });
     });
@@ -165,13 +175,17 @@ function updateBoard() {
     if (bigWinner) {
         winnerElement.textContent = `${bigWinner} wins the game!`;
         moveElement.textContent = '';
+        endgame(`${bigWinner} wins the game!`);
+
     } else if (bigBoardState.every(cell => cell !== '')) {
         winnerElement.textContent = `It's a draw!`;
         moveElement.textContent = '';
+        endgame("The game is a draw!");
     } else {
         winnerElement.textContent = '';
         moveElement.textContent = `Current turn: ${currentPlayer}`;
     }
+    
 }
 
 function checkWin(cells) {
@@ -189,6 +203,13 @@ function checkWin(cells) {
     }
 
     return null;
+}
+function endgame(result){
+    setTimeout(() => {
+        database.ref('games/' + gameId).remove();
+        alert(result);
+        window.location.reload();
+    }, 3000);
 }
 function copyGameID() {
     navigator.clipboard.writeText(gameId);
