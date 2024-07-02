@@ -73,6 +73,7 @@ function joinExistingGame() {
                         player = gameData.players.X ? 'O' : 'X';
                         database.ref('games/' + gameId + '/players').update({ [player]: true });
                         database.ref('games/' + gameId).update({ playerJoined: player });
+                        localStorage.setItem('localPlayer', player);
                         switchToGameScreen();
                         listenForOpponentLeave();
                         listenForPlayerJoin();
