@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('createGameBtn').addEventListener('click', createNewGame);
     document.getElementById('joinGameBtn').addEventListener('click', joinExistingGame);
     document.getElementById('copyGameIDBtn').addEventListener('click', copyGameID);
-    
+    window.addEventListener('beforeunload', handleLeaveGame);
 });
 
 function createNewGame() {
@@ -55,6 +55,8 @@ function createNewGame() {
     localStorage.setItem('localPlayer', "X");
     database.ref('games/' + gameId).set(gameData);
     switchToGameScreen();
+    listenForOpponentLeave();
+    listenForPlayerJoin();
 }
 
 function joinExistingGame() {
@@ -64,13 +66,17 @@ function joinExistingGame() {
         database.ref('games/' + gameId).once('value', (snapshot) => {
             if (snapshot.exists()) {
                 const gameData = snapshot.val();
-                if (gameData.players && gameData.players.X && gameData.players.O) {
-                    alert("Game is already full!");
-                } else {
-                    player = 'O';
-                    database.ref('games/' + gameId + '/players').update({ O: true });
-                    localStorage.setItem('localPlayer', "O");
-                    switchToGameScreen();
+                if (gameData.players) {
+                    if (gameData.players.X && gameData.players.O) {
+                        alert("Game is already full!");
+                    } else {
+                        player = gameData.players.X ? 'O' : 'X';
+                        database.ref('games/' + gameId + '/players').update({ [player]: true });
+                        database.ref('games/' + gameId).update({ playerJoined: player });
+                        switchToGameScreen();
+                        listenForOpponentLeave();
+                        listenForPlayerJoin();
+                    }
                 }
             } else {
                 alert("Game not found!");
@@ -213,4 +219,47 @@ function endgame(result){
 }
 function copyGameID() {
     navigator.clipboard.writeText(gameId);
+}
+function handleLeaveGame(event) {
+    console.log("handleLeaveGame called");
+    if (gameId && player) {
+        database.ref('games/' + gameId + '/players/' + player).remove();
+        database.ref('games/' + gameId).once('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                if (!data.players.X && !data.players.O) {
+                    database.ref('games/' + gameId).remove();
+                } else {
+                    const otherPlayer = player === 'X' ? 'O' : 'X';
+                    if (data.players[otherPlayer]) {
+                        //window.alert("The other player has left the game.");
+                        alert("The other player has left the game.");
+                        console("alert command sent");
+                    }
+                }
+            }
+        });
+    }
+}
+function listenForOpponentLeave() {
+    if (gameId && player) {
+        const opponent = player === 'X' ? 'O' : 'X';
+        database.ref('games/' + gameId + '/players/' + opponent).on('value', (snapshot) => {
+            if (!snapshot.exists()) {
+                alert("The other player has left the game.");
+                //window.location.reload();
+            }
+        });
+    }
+}
+function listenForPlayerJoin() {
+    if (gameId && player) {
+        database.ref('games/' + gameId + '/playerJoined').on('value', (snapshot) => {
+            const joinedPlayer = snapshot.val();
+            if (joinedPlayer && joinedPlayer !== player) {
+                alert(`Player ${joinedPlayer} has joined the game.`);
+                //console.log("alert command sent");
+            }
+        });
+    }
 }
