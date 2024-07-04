@@ -11,131 +11,137 @@
     <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container text-center mt-5">
-            <h1>Super Tic Tac Toe</h1> 
-            <span><a href="https://www.youtube.com/watch?v=_Na3a1ZrX7c" target="_blank">Tutorial</a></span><span><a href="#">        /        </a></span><span><a href="https://kshtij-7.github.io/TicTacToeMax-Online/">Multiplayer Version</a></span>
-            <h2 id="winner"></h2><br>
-            <h3 id="move"></h3><br><br>        
-    <div class="big-tic-tac-toe">
-        <div class="big-cell" id="big-cell0">
-            <div class="tic-tac-toe">
-                <div class="cell" id="cell0-0"></div>
-                <div class="cell" id="cell0-1"></div>
-                <div class="cell" id="cell0-2"></div>
-                <div class="cell" id="cell0-3"></div>
-                <div class="cell" id="cell0-4"></div>
-                <div class="cell" id="cell0-5"></div>
-                <div class="cell" id="cell0-6"></div>
-                <div class="cell" id="cell0-7"></div>
-                <div class="cell" id="cell0-8"></div>
+    <div id="homeScreen" class="container text-center mt-5">
+        <h1 class="mb-4">Super Tic Tac Toe</h1> 
+        <h5><span><a href="https://www.youtube.com/watch?v=_Na3a1ZrX7c" target="_blank">Tutorial</a></span><span><a href="#">        /        </a></span><span><a href="https://kshtij-7.github.io/TicTacToeMax/">Singleplayer Version</a></span></h5><br>
+        
+        <button id="createGameBtn" class="btn btn-primary">Create New Game</button>
+        <button id="joinGameBtn" class="btn btn-secondary">Join Game</button>
+    </div>
+    <div id="gameScreen" class="container text-center mt-5" style="display: none;">
+        <span><h3 id="gameIDLabel"></h3></span><span><button id="copyGameIDBtn">Copy Game ID</button></span><br>
+        <h4 id="playerDisplay"></h4><br>
+        <h2 id="winner"></h2><br>
+        <h3 id="move"></h3><br><br>
+        <div class="big-tic-tac-toe">
+            <div class="big-cell" id="big-cell0">
+                <div class="tic-tac-toe">
+                    <div class="cell" id="cell0-0"></div>
+                    <div class="cell" id="cell0-1"></div>
+                    <div class="cell" id="cell0-2"></div>
+                    <div class="cell" id="cell0-3"></div>
+                    <div class="cell" id="cell0-4"></div>
+                    <div class="cell" id="cell0-5"></div>
+                    <div class="cell" id="cell0-6"></div>
+                    <div class="cell" id="cell0-7"></div>
+                    <div class="cell" id="cell0-8"></div>
+                </div>
+            </div>
+            <div class="big-cell" id="big-cell1">
+                <div class="tic-tac-toe">
+                    <div class="cell" id="cell1-0"></div>
+                    <div class="cell" id="cell1-1"></div>
+                    <div class="cell" id="cell1-2"></div>
+                    <div class="cell" id="cell1-3"></div>
+                    <div class="cell" id="cell1-4"></div>
+                    <div class="cell" id="cell1-5"></div>
+                    <div class="cell" id="cell1-6"></div>
+                    <div class="cell" id="cell1-7"></div>
+                    <div class="cell" id="cell1-8"></div>
+                </div>
+            </div>
+            <div class="big-cell" id="big-cell2">
+                <div class="tic-tac-toe">
+                    <div class="cell" id="cell2-0"></div>
+                    <div class="cell" id="cell2-1"></div>
+                    <div class="cell" id="cell2-2"></div>
+                    <div class="cell" id="cell2-3"></div>
+                    <div class="cell" id="cell2-4"></div>
+                    <div class="cell" id="cell2-5"></div>
+                    <div class="cell" id="cell2-6"></div>
+                    <div class="cell" id="cell2-7"></div>
+                    <div class="cell" id="cell2-8"></div>
+                </div>
+            </div>
+            <div class="big-cell" id="big-cell3">
+                <div class="tic-tac-toe">
+                    <div class="cell" id="cell3-0"></div>
+                    <div class="cell" id="cell3-1"></div>
+                    <div class="cell" id="cell3-2"></div>
+                    <div class="cell" id="cell3-3"></div>
+                    <div class="cell" id="cell3-4"></div>
+                    <div class="cell" id="cell3-5"></div>
+                    <div class="cell" id="cell3-6"></div>
+                    <div class="cell" id="cell3-7"></div>
+                    <div class="cell" id="cell3-8"></div>
+                </div>
+            </div>
+            <div class="big-cell" id="big-cell4">
+                <div class="tic-tac-toe">
+                    <div class="cell" id="cell4-0"></div>
+                    <div class="cell" id="cell4-1"></div>
+                    <div class="cell" id="cell4-2"></div>
+                    <div class="cell" id="cell4-3"></div>
+                    <div class="cell" id="cell4-4"></div>
+                    <div class="cell" id="cell4-5"></div>
+                    <div class="cell" id="cell4-6"></div>
+                    <div class="cell" id="cell4-7"></div>
+                    <div class="cell" id="cell4-8"></div>
+                </div>
+            </div>
+            <div class="big-cell" id="big-cell5">
+                <div class="tic-tac-toe">
+                    <div class="cell" id="cell5-0"></div>
+                    <div class="cell" id="cell5-1"></div>
+                    <div class="cell" id="cell5-2"></div>
+                    <div class="cell" id="cell5-3"></div>
+                    <div class="cell" id="cell5-4"></div>
+                    <div class="cell" id="cell5-5"></div>
+                    <div class="cell" id="cell5-6"></div>
+                    <div class="cell" id="cell5-7"></div>
+                    <div class="cell" id="cell5-8"></div>
+                </div>
+            </div>
+            <div class="big-cell" id="big-cell6">
+                <div class="tic-tac-toe">
+                    <div class="cell" id="cell6-0"></div>
+                    <div class="cell" id="cell6-1"></div>
+                    <div class="cell" id="cell6-2"></div>
+                    <div class="cell" id="cell6-3"></div>
+                    <div class="cell" id="cell6-4"></div>
+                    <div class="cell" id="cell6-5"></div>
+                    <div class="cell" id="cell6-6"></div>
+                    <div class="cell" id="cell6-7"></div>
+                    <div class="cell" id="cell6-8"></div>
+                </div>
+            </div>
+            <div class="big-cell" id="big-cell7">
+                <div class="tic-tac-toe">
+                    <div class="cell" id="cell7-0"></div>
+                    <div class="cell" id="cell7-1"></div>
+                    <div class="cell" id="cell7-2"></div>
+                    <div class="cell" id="cell7-3"></div>
+                    <div class="cell" id="cell7-4"></div>
+                    <div class="cell" id="cell7-5"></div>
+                    <div class="cell" id="cell7-6"></div>
+                    <div class="cell" id="cell7-7"></div>
+                    <div class="cell" id="cell7-8"></div>
+                </div>
+            </div>
+            <div class="big-cell" id="big-cell8">
+                <div class="tic-tac-toe">
+                    <div class="cell" id="cell8-0"></div>
+                    <div class="cell" id="cell8-1"></div>
+                    <div class="cell" id="cell8-2"></div>
+                    <div class="cell" id="cell8-3"></div>
+                    <div class="cell" id="cell8-4"></div>
+                    <div class="cell" id="cell8-5"></div>
+                    <div class="cell" id="cell8-6"></div>
+                    <div class="cell" id="cell8-7"></div>
+                    <div class="cell" id="cell8-8"></div>
+                </div>
             </div>
         </div>
-        <div class="big-cell" id="big-cell1">
-            <div class="tic-tac-toe">
-                <div class="cell" id="cell1-0"></div>
-                <div class="cell" id="cell1-1"></div>
-                <div class="cell" id="cell1-2"></div>
-                <div class="cell" id="cell1-3"></div>
-                <div class="cell" id="cell1-4"></div>
-                <div class="cell" id="cell1-5"></div>
-                <div class="cell" id="cell1-6"></div>
-                <div class="cell" id="cell1-7"></div>
-                <div class="cell" id="cell1-8"></div>
-            </div>
-        </div>
-        <div class="big-cell" id="big-cell2">
-            <div class="tic-tac-toe">
-                <div class="cell" id="cell2-0"></div>
-                <div class="cell" id="cell2-1"></div>
-                <div class="cell" id="cell2-2"></div>
-                <div class="cell" id="cell2-3"></div>
-                <div class="cell" id="cell2-4"></div>
-                <div class="cell" id="cell2-5"></div>
-                <div class="cell" id="cell2-6"></div>
-                <div class="cell" id="cell2-7"></div>
-                <div class="cell" id="cell2-8"></div>
-            </div>
-        </div>
-        <div class="big-cell" id="big-cell3">
-            <div class="tic-tac-toe">
-                <div class="cell" id="cell3-0"></div>
-                <div class="cell" id="cell3-1"></div>
-                <div class="cell" id="cell3-2"></div>
-                <div class="cell" id="cell3-3"></div>
-                <div class="cell" id="cell3-4"></div>
-                <div class="cell" id="cell3-5"></div>
-                <div class="cell" id="cell3-6"></div>
-                <div class="cell" id="cell3-7"></div>
-                <div class="cell" id="cell3-8"></div>
-            </div>
-        </div>
-        <div class="big-cell" id="big-cell4">
-            <div class="tic-tac-toe">
-                <div class="cell" id="cell4-0"></div>
-                <div class="cell" id="cell4-1"></div>
-                <div class="cell" id="cell4-2"></div>
-                <div class="cell" id="cell4-3"></div>
-                <div class="cell" id="cell4-4"></div>
-                <div class="cell" id="cell4-5"></div>
-                <div class="cell" id="cell4-6"></div>
-                <div class="cell" id="cell4-7"></div>
-                <div class="cell" id="cell4-8"></div>
-            </div>
-        </div>
-        <div class="big-cell" id="big-cell5">
-            <div class="tic-tac-toe">
-                <div class="cell" id="cell5-0"></div>
-                <div class="cell" id="cell5-1"></div>
-                <div class="cell" id="cell5-2"></div>
-                <div class="cell" id="cell5-3"></div>
-                <div class="cell" id="cell5-4"></div>
-                <div class="cell" id="cell5-5"></div>
-                <div class="cell" id="cell5-6"></div>
-                <div class="cell" id="cell5-7"></div>
-                <div class="cell" id="cell5-8"></div>
-            </div>
-        </div>
-        <div class="big-cell" id="big-cell6">
-            <div class="tic-tac-toe">
-                <div class="cell" id="cell6-0"></div>
-                <div class="cell" id="cell6-1"></div>
-                <div class="cell" id="cell6-2"></div>
-                <div class="cell" id="cell6-3"></div>
-                <div class="cell" id="cell6-4"></div>
-                <div class="cell" id="cell6-5"></div>
-                <div class="cell" id="cell6-6"></div>
-                <div class="cell" id="cell6-7"></div>
-                <div class="cell" id="cell6-8"></div>
-            </div>
-        </div>
-        <div class="big-cell" id="big-cell7">
-            <div class="tic-tac-toe">
-                <div class="cell" id="cell7-0"></div>
-                <div class="cell" id="cell7-1"></div>
-                <div class="cell" id="cell7-2"></div>
-                <div class="cell" id="cell7-3"></div>
-                <div class="cell" id="cell7-4"></div>
-                <div class="cell" id="cell7-5"></div>
-                <div class="cell" id="cell7-6"></div>
-                <div class="cell" id="cell7-7"></div>
-                <div class="cell" id="cell7-8"></div>
-            </div>
-        </div>
-        <div class="big-cell" id="big-cell8">
-            <div class="tic-tac-toe">
-                <div class="cell" id="cell8-0"></div>
-                <div class="cell" id="cell8-1"></div>
-                <div class="cell" id="cell8-2"></div>
-                <div class="cell" id="cell8-3"></div>
-                <div class="cell" id="cell8-4"></div>
-                <div class="cell" id="cell8-5"></div>
-                <div class="cell" id="cell8-6"></div>
-                <div class="cell" id="cell8-7"></div>
-                <div class="cell" id="cell8-8"></div>
-            </div>
-        </div>
-    </div><br><br>
-    <button id="reset">Reset</button>
     </div>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -143,5 +149,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
 </body>
 </html>
