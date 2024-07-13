@@ -35,8 +35,49 @@ let allowedBoard = -1; // Initially, player can play anywhere
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('createGameBtn').addEventListener('click', createNewGame);
     document.getElementById('joinGameBtn').addEventListener('click', joinExistingGame);
+    
     document.getElementById('copyGameIDBtn').addEventListener('click', copyGameID);
     window.addEventListener('beforeunload', handleLeaveGame);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const gameIDFromURL = urlParams.get('game-id');
+     if (gameIDFromURL) {
+        gameId = gameIDFromURL;
+        attemptAutoJoinGame(gameIDFromURL);
+    }
+
+    document.getElementById('quitGame').addEventListener('click', quitGame);
+
+    const shareGameLinkBtn = document.getElementById('shareGameLinkBtn');
+    const twitterShare = document.getElementById('twitterShare');
+    const facebookShare = document.getElementById('facebookShare');
+    const socialShare = document.getElementById('socialShare');
+    const whatsappShare=document.getElementById('whatsappShare');
+
+    shareGameLinkBtn.addEventListener('click', () => {
+        const gamelink = `https://kshtij-7.github.io/TicTacToeMax-Online/?game-id=${gameId}`;
+        if (navigator.share) {
+            navigator.share({
+                title: 'Join my Super Tic Tac Toe Game!',
+                text: 'You have been invited to join a Super Tic Tac Toe game! ',
+                url: `${gamelink} You have been invited to join a Super Tic Tac Toe game!`
+            }).then(() => {
+                console.log('');
+            }).catch((error) => {
+                console.error('Error sharing:', error);
+            });
+        } else {
+            alert('Your browser does not support the Web Share API. Use the buttons below to share manually.');
+            socialShare.style.display = 'block';
+        }
+    });
+
+    
+    twitterShare.href = `https://twitter.com/intent/tweet?text=Join%20my%20Tic%20Tac%20Toe%20game!%20${encodeURIComponent(gameLink)}`;
+    facebookShare.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(gameLink)}`;
+    whatsappShare.href = `https://wa.me/?text=You%20have%20been%20invited%20to%20join%20a%20Super%20Tic%20Tac%20Toe%20game!%20%20${gameLink}`;
+
+    
 });
 
 function createNewGame() {
@@ -57,6 +98,7 @@ function createNewGame() {
     switchToGameScreen();
     listenForOpponentLeave();
     listenForPlayerJoin();
+    sendhook();
 }
 
 function joinExistingGame() {
@@ -84,6 +126,30 @@ function joinExistingGame() {
             }
         });
     }
+}
+
+function attemptAutoJoinGame(gameIDFromURL) {
+    database.ref('games/' + gameIDFromURL).once('value', (snapshot) => {
+        if (snapshot.exists()) {
+            const gameData = snapshot.val();
+            if (gameData.players) {
+                if (gameData.players.X && gameData.players.O) {
+                    alert("Game is already full!");
+                } else {
+                    player = gameData.players.X ? 'O' : 'X';
+                    database.ref('games/' + gameIDFromURL + '/players').update({ [player]: true });
+                    database.ref('games/' + gameIDFromURL).update({ playerJoined: player });
+                    localStorage.setItem('localPlayer', player);
+                    gameId = gameIDFromURL;
+                    switchToGameScreen();
+                    listenForOpponentLeave();
+                    listenForPlayerJoin();
+                }
+            }
+        } else {
+            alert("Game not found!");
+        }
+    });
 }
 
 function switchToGameScreen() {
@@ -116,7 +182,7 @@ function handleCellClick(event) {
     const cellId = event.target.id.split('-');
     const bigCellIndex = parseInt(cellId[0].replace('cell', ''), 10);
     const smallCellIndex = parseInt(cellId[1], 10);
-    //document.getElementById(event.target.id).classList.remove('highlight');
+   
     if (gameState[bigCellIndex][smallCellIndex] !== '' || currentPlayer !== player) {
         return;
     }
@@ -126,13 +192,12 @@ function handleCellClick(event) {
     }
 
     gameState[bigCellIndex][smallCellIndex] = player;
-    //cellItself.style.color = player === 'X' ? 'blue' : 'red';
     cellItself.classList.remove('highlight');
     if (checkWin(gameState[bigCellIndex])) {
         bigBoardState[bigCellIndex] = player;
         for(cello in gameState[bigCellIndex]){
             gameState[bigCellIndex][cello] = player;
-            //document.getElementById(`cell${bigCellIndex}-${cello}`).style.color = player === 'X' ? 'blue' : 'red';            
+                        
         }
     } else if (gameState[bigCellIndex].every(cell => cell !== '')) {
         bigBoardState[bigCellIndex] = 'D'; // Draw
@@ -185,11 +250,13 @@ function updateBoard() {
     if (bigWinner) {
         winnerElement.textContent = `${bigWinner} wins the game!`;
         moveElement.textContent = '';
+        alert(`${bigWinner} wins the game!`);
         endgame(`${bigWinner} wins the game!`);
 
     } else if (bigBoardState.every(cell => cell !== '')) {
         winnerElement.textContent = `It's a draw!`;
         moveElement.textContent = '';
+        alert("The game is a draw!");
         endgame("The game is a draw!");
     } else {
         winnerElement.textContent = '';
@@ -222,7 +289,14 @@ function endgame(result){
     }, 3000);
 }
 function copyGameID() {
-    navigator.clipboard.writeText(gameId);
+    navigator.clipboard.writeText(gameId).then(() => {
+        document.getElementById('copyGameIDBtn').classList.add('animate');
+        setTimeout(() => {
+            document.getElementById('copyGameIDBtn').classList.remove('animate');
+        }, 1000);
+    }).catch(err => {
+        console.error('Failed to copy: ', err);
+    });
 }
 function handleLeaveGame(event) {
     console.log("handleLeaveGame called");
@@ -236,7 +310,7 @@ function handleLeaveGame(event) {
                 } else {
                     const otherPlayer = player === 'X' ? 'O' : 'X';
                     if (data.players[otherPlayer]) {
-                        //window.alert("The other player has left the game.");
+                        
                         alert("The other player has left the game.");
                         console("alert command sent");
                     }
@@ -251,7 +325,7 @@ function listenForOpponentLeave() {
         database.ref('games/' + gameId + '/players/' + opponent).on('value', (snapshot) => {
             if (!snapshot.exists()) {
                 alert("The other player has left the game.");
-                //window.location.reload();
+                
             }
         });
     }
@@ -262,8 +336,29 @@ function listenForPlayerJoin() {
             const joinedPlayer = snapshot.val();
             if (joinedPlayer && joinedPlayer !== player) {
                 alert(`Player ${joinedPlayer} has joined the game.`);
-                //console.log("alert command sent");
+                
             }
         });
     }
+}
+function quitGame() {
+    const conf = confirm("Are you sure you want to quit the game?");
+    if(conf){
+        window.location.assign('https://kshtij-7.github.io/TicTacToeMax-Online/');
+        
+    }
+}
+function sendhook(){
+    const request = new XMLHttpRequest();
+    request.open("POST", "https://discord.com/api/webhooks/1261343257435050136/ZlRl8YZUI3jkpazNjhbTMRDUZLyeJ1tzZh3-MSZ0ymZ4ajaGsC9Yulj51YzhyHZvMolJ");
+
+    request.setRequestHeader('Content-type', 'application/json');
+
+    const params = {
+        username: "Tic Tac Toe Max notifier",
+        avatar_url: "",
+        content: `New game created: ${gameId}`
+    }
+
+    request.send(JSON.stringify(params));
 }

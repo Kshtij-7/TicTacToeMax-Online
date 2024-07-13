@@ -13,16 +13,24 @@
 <body>
     <div id="homeScreen" class="container text-center mt-5">
         <h1 class="mb-4">Super Tic Tac Toe</h1> 
-        <h5><span><a href="https://www.youtube.com/watch?v=_Na3a1ZrX7c" target="_blank">Tutorial</a></span><span><a href="#">        /        </a></span><span><a href="https://kshtij-7.github.io/TicTacToeMax/">Single Device Version</a></span></h5><br>
+        <h5><a href="https://www.youtube.com/watch?v=_Na3a1ZrX7c" target="_blank" class="btn btn-success">Tutorial</a><br><br>
+        <a href="https://kshtij-7.github.io/TicTacToeMax/" class="btn btn-primary">Single Device Version</a></h5><br>
         
         <button id="createGameBtn" class="btn btn-primary">Create New Game</button>
         <button id="joinGameBtn" class="btn btn-secondary">Join Game</button>
     </div>
+    
     <div id="gameScreen" class="container text-center mt-5" style="display: none;">
-        <span><h3 id="gameIDLabel"></h3></span><span><button id="copyGameIDBtn">Copy Game ID</button></span><br>
+        <span><h3 id="gameIDLabel"></h3></span><span><button id="copyGameIDBtn" class="btn btn-success">Copy Game ID</button></span><br>
+        <button id="shareGameLinkBtn" class="btn btn-info mt-3">Share Game Link</button>
+        <div id="socialShare" style="display: none;">
+            <a id="whatsappShare" class="btn btn-primary" href="#" target="_blank">Share on WhatsApp</a>
+            <a id="twitterShare" class="btn btn-primary" href="#" target="_blank">Share on Twitter</a>
+            <a id="facebookShare" class="btn btn-primary" href="#" target="_blank">Share on Facebook</a>
+        </div>
         <h4 id="playerDisplay"></h4><br>
-        <h2 id="winner"></h2><br>
-        <h3 id="move"></h3><br><br>
+        <h2 id="winner"></h2>
+        <h3 id="move"></h3><br>
         <div class="big-tic-tac-toe">
             <div class="big-cell" id="big-cell0">
                 <div class="tic-tac-toe">
@@ -142,6 +150,8 @@
                 </div>
             </div>
         </div>
+        <br>
+        <button id="quitGame" class="btn btn-danger">Quit</button>       
     </div>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -149,6 +159,11 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!--<footer class="footer mt-auto text-black">
+        <div class="container text-center">
+            <span>Made by <a href="https://github.com/Kshtij-7" target="_blank">Kshitij Lahoti</a>        <a href="mailto:kshitijlahoti007@gmail.com" target="_blank">&#9993;</a></span>
+        </div>
+    </footer>-->
     
 </body>
 </html>
