@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
             navigator.share({
                 title: 'Join my Super Tic Tac Toe Game!',
                 text: 'You have been invited to join a Super Tic Tac Toe game! ',
-                url: `${gamelink} You have been invited to join a Super Tic Tac Toe game!`
+                url: `${gamelink}`
             }).then(() => {
                 console.log('');
             }).catch((error) => {
